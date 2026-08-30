@@ -17,7 +17,7 @@ implementada en este repositorio.
 |------|--------|-------------------|-----------------|-------------|--------|
 | 0 | Legal & Research | 6–10 semanas (en paralelo con Fase 1) | 1 PM + asesoría legal RD/crypto + 1 compliance officer | No | Pendiente (checklist abajo) |
 | 1 | Prototype | 6–8 semanas | 2–3 full-stack + 1 diseñador | No (todo simulado) | ✅ **Implementada en este repo** |
-| 2 | Testnet | 10–14 semanas | +2 ingenieros Solidity, +1 backend, +1 QA | No (Base Sepolia + test USDC) | Pendiente |
+| 2 | Testnet | 10–14 semanas | +2 ingenieros Solidity, +1 backend, +1 QA | No (Base Sepolia + test USDC) | 🔨 **En curso: contratos implementados y testeados** (ver abajo) |
 | 3 | Closed Beta | 8–12 semanas | Equipo Fase 2 + soporte + ops | Limitado, usuarios invitados | Pendiente |
 | 4 | Production | 6–8 semanas de hardening + gate de auditoría | Equipo completo + auditoría externa | Sí, tras aprobación legal/auditoría | Pendiente |
 
@@ -73,15 +73,28 @@ API routes de Next.js) para iterar rápido sin dinero real. El port a .NET 10/AS
 Core como monolito modular está planificado para Fase 2; el dominio está escrito como
 funciones puras sin dependencia del framework precisamente para que ese port sea directo.
 
-## Fase 2 — Testnet (10–14 semanas)
+## Fase 2 — Testnet (10–14 semanas) — 🔨 en curso
 
-- Smart contracts reales con Foundry: `MarketFactory`, `CollateralVault`,
-  `PositionToken` (ERC-1155), `Exchange` (órdenes EIP-712, matching off-chain +
-  settlement on-chain), `OracleAdapter`, `DisputeManager`, `FeeManager`,
-  `EmergencyPause`, multisig + timelock (§27, §41).
-- Suite de seguridad: unit + fuzz + invariant tests, Slither, Echidna (§28).
-- Base Sepolia + test USDC; Chain Selection Engine con scoring formal (§4) —
-  candidato inicial **Base**, alternativas Arbitrum One / Optimism.
+**Completado en este repo** (`contracts/`, proyecto Foundry):
+- Contratos reales con OpenZeppelin v5: `MarketRegistry` (máquina de estados +
+  pausa de emergencia), `PositionToken` (ERC-1155), `CollateralVault` (custodia
+  segregada, claim idempotente, VOID a 50¢), `ResolutionManager` (propose →
+  dispute con bond → finalize/arbitrate), `Exchange` (órdenes EIP-712,
+  settleMint/settleTransfer, fee bps con tope 1%), `MockUSDC` (faucet testnet).
+- 14 tests Foundry: ciclo completo, disputa con bond, VOID, pausa (AC-013),
+  firmas inválidas/canceladas/overfill, admin no puede fijar resultado (§46),
+  fuzz de conservación de colateral.
+- `script/Deploy.s.sol` para Base Sepolia (chain 84532), verificado end-to-end
+  contra anvil; conectividad al RPC público de Base Sepolia comprobada. Para el
+  broadcast real: `PRIVATE_KEY` con ETH de faucet + `forge script … --broadcast`.
+- CI en GitHub Actions (dominio + web + contratos).
+
+**Pendiente de Fase 2:**
+- Despliegue efectivo en Base Sepolia (requiere clave con fondos del faucet) y
+  publicación de direcciones; simulacros §52 sobre la testnet.
+- Invariant tests ampliados, Slither, Echidna (§28); multisig + timelock (§41).
+- Chain Selection Engine con scoring formal (§4) — candidato inicial **Base**,
+  alternativas Arbitrum One / Optimism.
 - Backend .NET 10 monolito modular (§23), PostgreSQL + Redis, event bus, Blockchain
   Indexer con reorg detection y RPC failover (§26).
 - Wallets: WalletConnect/MetaMask/Coinbase + embedded smart accounts, ERC-4337 y

@@ -8,3 +8,8 @@ coverage/
 .DS_Store
 out/
 *.tsbuildinfo
+
+# Foundry
+contracts/cache/
+contracts/out/
+contracts/broadcast/*/31337/

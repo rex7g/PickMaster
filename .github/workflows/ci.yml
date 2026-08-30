@@ -1,0 +1,39 @@
+# CI (§50): lint/tests del dominio, build de la web y tests de contratos.
+name: CI
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+  pull_request:
+
+jobs:
+  core-and-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Domain tests (AC-001..AC-013)
+        run: npm test
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Web build
+        run: npm run build
+
+  contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: foundry-rs/foundry-toolchain@v1
+      - name: Build
+        run: forge build
+      - name: Tests (lifecycle, disputas, VOID, pausa, fuzz)
+        run: forge test -vv

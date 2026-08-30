@@ -1,25 +1,50 @@
-# PickMaster — Smart Contract Architecture (Fase 2)
+# PickMaster — Smart Contracts (Fase 2 — Testnet Base Sepolia)
 
-> **Estado: especificación de referencia.** Estos contratos definen la arquitectura
-> on-chain del protocolo (§27 del Master Prompt) para la Fase 2 (Testnet). **No están
-> compilados, testeados ni auditados**, y no deben desplegarse en ninguna red sin
-> completar el gate de seguridad (§28): unit + fuzz + invariant tests con Foundry,
-> Slither, Echidna, verificación formal de componentes críticos y auditoría externa.
+> **Estado: implementación funcional para testnet.** Proyecto Foundry con el
+> protocolo on-chain (§27), 14 tests pasando (ciclo completo, disputa, VOID,
+> pausa de emergencia, seguridad de firmas y fuzzing de conservación de
+> colateral) y script de despliegue para Base Sepolia verificado contra una
+> cadena local (anvil). **Aún NO auditado**: el gate de mainnet (§28) exige
+> además invariant tests ampliados, Slither, Echidna y auditoría externa.
+
+## Desplegar en Base Sepolia
+
+```bash
+cd contracts
+forge test                                  # 14/14
+export PRIVATE_KEY=0x...                    # clave con ETH de faucet de Base Sepolia
+forge script script/Deploy.s.sol --rpc-url base_sepolia --broadcast
+```
+
+El script despliega `MockUSDC` (tUSDC con faucet abierto, sólo testnet), los cinco
+contratos del protocolo, cablea los roles con mínimo privilegio y crea el mercado
+demo `usd-dop-64-diciembre-2026`. Variables opcionales: `USDC_ADDRESS`, `TREASURY`,
+`GUARDIAN`, `DISPUTE_BOND`, `FEE_BPS`. En testnet el deployer concentra los roles
+operativos para simulacros (§52); en staging/producción van al backend, al
+agregador de oráculos y al multisig de arbitraje tras un timelock (§41).
 
 ## Topología (§27)
 
 ```
-MarketFactory ──crea──▶ Market (estado + reglas de un mercado)
-      │
-      ├── CollateralVault   — custodia segregada de USDC por mercado (§2.5)
-      ├── PositionToken     — ERC-1155: un tokenId por (market, outcome)
-      ├── Exchange          — settlement de órdenes EIP-712 casadas off-chain (§16)
-      ├── OracleAdapter     — recibe resultados del agregador de oráculos (§11)
-      ├── DisputeManager    — propuesta → ventana de disputa → arbitraje (§12–13)
-      ├── FeeManager        — fees separadas y visibles (§18)
-      ├── Treasury          — multisig + timelock (§41)
-      └── EmergencyPause    — pausa global auditada (AC-013)
+MarketRegistry      — factory + máquina de estados del mercado + pausa global (AC-013)
+      │                (rulesHash ancla las reglas publicadas, §56)
+      ├── PositionToken     — ERC-1155: tokenId = keccak256(marketId, outcome)
+      ├── CollateralVault   — custodia segregada de USDC por mercado (§2.5, §45)
+      │                       claim() paga 1.00 USDC/share ganador; redeemVoid()
+      │                       devuelve 0.50/share a ambos lados (§46)
+      ├── Exchange          — settlement de órdenes EIP-712 casadas off-chain (§16):
+      │                       settleMint (BUY YES × BUY NO) y settleTransfer;
+      │                       fee bps transparente con tope duro de 1% (§18)
+      └── ResolutionManager — oracle adapter + dispute manager (§11–13):
+                              propose → ventana de disputa con bond → finalize
+                              permissionless / arbitrate por comité; único
+                              titular de RESOLVER_ROLE en el registry
+MockUSDC            — colateral de prueba con faucet (SÓLO testnet, §52)
 ```
+
+Nadie — ni el admin — puede fijar un resultado directamente: `setResolved` sólo es
+invocable por el `ResolutionManager`, y el test
+`test_AdminCannotSetOutcomeDirectly` lo verifica (§46).
 
 Principios aplicados:
 
@@ -33,8 +58,8 @@ Principios aplicados:
   flujo OracleAdapter → DisputeManager, o VOID (§46).
 - **AI sin acceso a fondos**: los agentes sólo llegan hasta la propuesta; ejecución
   requiere humano/multisig/oráculo (§33).
-- OpenZeppelin (`AccessControl`, `ReentrancyGuard`, `Pausable`, `SafeERC20`) se
-  incorpora al materializar los contratos con Foundry en Fase 2.
+- OpenZeppelin v5 en todo el protocolo: `AccessControl`, `ReentrancyGuard`,
+  `Pausable`, `SafeERC20`, `ERC1155Supply`, `EIP712`/`ECDSA`.
 
 ## Gate de salida a mainnet (§28, §63)
 
