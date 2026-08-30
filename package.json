@@ -1,0 +1,16 @@
+{
+  "name": "pickmaster",
+  "private": true,
+  "version": "0.1.0",
+  "description": "PickMaster — Prediction markets platform for verifiable events, starting in the Dominican Republic",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "npm run test --workspace=@pickmaster/core",
+    "build": "npm run build --workspace=@pickmaster/web",
+    "dev": "npm run dev --workspace=@pickmaster/web",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}
