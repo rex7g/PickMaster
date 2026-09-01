@@ -95,6 +95,6 @@ hallazgos → `RiskEvent`.
 | Domain/Database model | `packages/core/src/types.ts` |
 | Smart contract architecture | `contracts/` |
 | Oracle/Resolution/Arbitration/Arbitrage specs | `packages/core/src/{oracle,resolution,arbitrage}.ts` |
-| Compliance architecture | `packages/core/src/compliance.ts` + Fase 0 en `PLAN.md` |
+| Compliance architecture | `packages/core/src/compliance.ts` (la habilitación regulatoria es dependencia externa al repo) |
 | API specification | `apps/web/app/api/**` |
 | Test strategy | vitest sobre AC-001..AC-013; fuzz/invariant en Fase 2 |

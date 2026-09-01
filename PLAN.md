@@ -15,32 +15,20 @@ implementada en este repositorio.
 
 | Fase | Nombre | Duración estimada | Equipo estimado | Dinero real | Estado |
 |------|--------|-------------------|-----------------|-------------|--------|
-| 0 | Legal & Research | 6–10 semanas (en paralelo con Fase 1) | 1 PM + asesoría legal RD/crypto + 1 compliance officer | No | Pendiente (checklist abajo) |
 | 1 | Prototype | 6–8 semanas | 2–3 full-stack + 1 diseñador | No (todo simulado) | ✅ **Implementada en este repo** |
 | 2 | Testnet | 10–14 semanas | +2 ingenieros Solidity, +1 backend, +1 QA | No (Base Sepolia + test USDC) | ✅ **Desplegada y operativa en Base Sepolia** (ver abajo) |
 | 3 | Closed Beta | 8–12 semanas | Equipo Fase 2 + soporte + ops | Limitado, usuarios invitados | Pendiente |
 | 4 | Production | 6–8 semanas de hardening + gate de auditoría | Equipo completo + auditoría externa | Sí, tras aprobación legal/auditoría | Pendiente |
 
-**Camino crítico:** Fase 0 (legal) bloquea cualquier operación con dinero real; Fase 1 y
-Fase 0 corren en paralelo. La auditoría externa de contratos (Fase 4) debe contratarse al
-final de Fase 2 por sus plazos (típicamente 4–8 semanas de espera).
+**Camino crítico:** la auditoría externa de contratos (Fase 4) debe contratarse al final
+de Fase 2 por sus plazos (típicamente 4–8 semanas de espera).
+
+**Alcance:** este plan cubre el desarrollo técnico del protocolo y del producto. La
+habilitación legal y regulatoria (clasificación, licencias, KYC/AML, licenciamiento de
+datos) queda **fuera del alcance de este repositorio** y se gestiona por separado; sigue
+siendo una dependencia externa del gate de producción (Fase 4).
 
 ---
-
-## Fase 0 — Legal & Research (6–10 semanas)
-
-Regulatory & Compliance Gate obligatorio antes de habilitar dinero real (§2, §31, §63).
-
-Entregables:
-- Opinión legal y clasificación regulatoria en República Dominicana (Ley 139-11 y
-  normativa de juegos de azar por Internet; requisitos de Hacienda sobre cuentas,
-  procesamiento de pagos, infraestructura, inspección y conservación de información).
-- Matriz de jurisdicciones (RD, EE. UU., UE, resto) → `ALLOWED / RESTRICTED / BLOCKED /
-  REQUIRES_REVIEW` por tipo de mercado.
-- Selección de proveedores KYC/AML y sanctions screening.
-- Modelo de pagos (on-ramp/off-ramp USDC) y su tratamiento regulatorio.
-- Licenciamiento de datos (JCE, Banco Central, ONE, ONAMET, ligas deportivas) — sin
-  scraping de fuentes que lo prohíban (§35).
 
 ## Fase 1 — Prototype (6–8 semanas) — ✅ este repositorio
 
@@ -143,7 +131,8 @@ funciones puras sin dependencia del framework precisamente para que ese port sea
 
 Gate de salida (todos obligatorios, §63):
 - Auditoría externa de contratos publicada y hallazgos críticos resueltos.
-- Aprobación legal y de compliance por jurisdicción.
+- Habilitación legal/regulatoria por jurisdicción — **dependencia externa**,
+  gestionada fuera del alcance de este repositorio.
 - Security review de infraestructura y threat model actualizado (§42).
 - Monitoring y runbooks de incidentes/disaster recovery operativos.
 

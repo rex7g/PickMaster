@@ -3,14 +3,15 @@
  * MarketEligibility(userJurisdiction, marketJurisdiction, regulatoryStatus,
  * userRisk) → ALLOWED | RESTRICTED | BLOCKED | REQUIRES_REVIEW.
  *
- * The Phase 1 jurisdiction matrix is a placeholder pending the Phase 0
- * legal opinion (PLAN.md): a decentralized architecture does not exempt
- * PickMaster from regulation, including DR requirements for internet
- * gaming operations.
+ * The jurisdiction matrix below is a placeholder: the authoritative list
+ * comes from the legal/regulatory work, which is handled outside this
+ * repository. A decentralized architecture does not exempt PickMaster from
+ * regulation, including DR requirements for internet gaming operations, so
+ * these values must be reviewed before enabling real money.
  */
 import type { EligibilityResult, Market, UserProfile } from "./types";
 
-/** Jurisdictions where operating is blocked pending legal review (Phase 0). */
+/** Jurisdictions where operating is blocked pending legal review. */
 const BLOCKED_JURISDICTIONS = new Set(["US", "KP", "IR", "CU", "SY"]);
 /** Jurisdictions requiring case-by-case review. */
 const REVIEW_JURISDICTIONS = new Set(["VE", "NI"]);

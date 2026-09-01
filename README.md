@@ -59,6 +59,7 @@ usuario demo con $1,000 USDC simulados. Flujo completo demostrable desde la UI:
 
 - El resultado de un mercado sólo se fija vía oráculo → disputa → arbitraje, o VOID.
   Nunca un cambio administrativo directo tras el cierre.
-- Ninguna operación con dinero real sin el Regulatory & Compliance Gate (Fase 0) y
-  auditoría externa de contratos (Fase 4).
+- Ninguna operación con dinero real sin auditoría externa de contratos (Fase 4) y
+  la habilitación regulatoria correspondiente, que se gestiona fuera de este
+  repositorio.
 - Los agentes IA recomiendan; nunca custodian fondos ni claves.
