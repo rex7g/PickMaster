@@ -24,11 +24,19 @@ contracts/           Arquitectura de smart contracts (Solidity, referencia para 
 
 ## Ejecutar
 
+**Importante:** es un monorepo con npm workspaces — `npm install` va siempre en la
+**raíz** del repositorio, no dentro de `apps/web`.
+
 ```bash
-npm install
-npm test        # 21 tests de aceptación (criterios §47 del Master Prompt)
+npm install     # SIEMPRE desde la raíz (instala core + web)
+npm test        # tests de aceptación (criterios §47 del Master Prompt)
 npm run dev     # web en http://localhost:3000
 ```
+
+> Si tras un `git pull` aparece `Module not found: Can't resolve 'viem'` (o
+> cualquier otra dependencia), es que `node_modules` quedó desactualizado
+> respecto al `package.json`: vuelve a ejecutar `npm install` en la raíz. El
+> script `predev`/`prebuild` detecta este caso y lo indica explícitamente.
 
 La web arranca con mercados dominicanos sembrados, un market maker simulado y un
 usuario demo con $1,000 USDC simulados. Flujo completo demostrable desde la UI:
