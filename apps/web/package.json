@@ -12,7 +12,8 @@
     "@pickmaster/core": "*",
     "next": "^15.5.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "viem": "^2.56.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

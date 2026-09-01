@@ -91,8 +91,14 @@ funciones puras sin dependencia del framework precisamente para que ese port sea
 
 **Pendiente de Fase 2:**
 - ~~Despliegue efectivo en Base Sepolia~~ ✅ desplegado el 2026-09-01
-  (direcciones en `contracts/deployments/base-sepolia.json`); quedan los
-  simulacros §52 sobre la testnet.
+  (direcciones en `contracts/deployments/base-sepolia.json`), código fuente
+  verificado en Blockscout.
+- ~~Simulacros §52 sobre la testnet~~ ✅ ejecutados on-chain
+  (`script/Drills.s.sol`): trades MINT reales con firmas EIP-712, resolución
+  disputada con bond devuelto, finalización permissionless tras la ventana,
+  VOID con reembolso 50/50 y pausa de emergencia.
+- Lectura on-chain en la web (`/testnet` vía viem) ✅; el trading con wallet
+  del usuario (WalletConnect + firma EIP-712 en el cliente) sigue pendiente.
 - Invariant tests ampliados, Slither, Echidna (§28); multisig + timelock (§41).
 - Chain Selection Engine con scoring formal (§4) — candidato inicial **Base**,
   alternativas Arbitrum One / Optimism.
