@@ -90,8 +90,9 @@ funciones puras sin dependencia del framework precisamente para que ese port sea
 - CI en GitHub Actions (dominio + web + contratos).
 
 **Pendiente de Fase 2:**
-- Despliegue efectivo en Base Sepolia (requiere clave con fondos del faucet) y
-  publicación de direcciones; simulacros §52 sobre la testnet.
+- ~~Despliegue efectivo en Base Sepolia~~ ✅ desplegado el 2026-09-01
+  (direcciones en `contracts/deployments/base-sepolia.json`); quedan los
+  simulacros §52 sobre la testnet.
 - Invariant tests ampliados, Slither, Echidna (§28); multisig + timelock (§41).
 - Chain Selection Engine con scoring formal (§4) — candidato inicial **Base**,
   alternativas Arbitrum One / Optimism.

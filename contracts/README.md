@@ -7,6 +7,22 @@
 > cadena local (anvil). **Aún NO auditado**: el gate de mainnet (§28) exige
 > además invariant tests ampliados, Slither, Echidna y auditoría externa.
 
+## ✅ Desplegado en Base Sepolia (2026-09-01)
+
+| Contrato | Dirección |
+|---|---|
+| MockUSDC (tUSDC) | [`0xda1d069ffd04fdb3f730d01168336f07695ef86e`](https://sepolia.basescan.org/address/0xda1d069ffd04fdb3f730d01168336f07695ef86e) |
+| MarketRegistry | [`0x082d4e5f31518cdc209c3a414d9fbab33544f63f`](https://sepolia.basescan.org/address/0x082d4e5f31518cdc209c3a414d9fbab33544f63f) |
+| PositionToken | [`0xb70655a2c6b1d31564a035b616238ef4c6396a94`](https://sepolia.basescan.org/address/0xb70655a2c6b1d31564a035b616238ef4c6396a94) |
+| CollateralVault | [`0x568792c87b6c95c4cd75de4ea058c0f5cc6f904e`](https://sepolia.basescan.org/address/0x568792c87b6c95c4cd75de4ea058c0f5cc6f904e) |
+| ResolutionManager | [`0xae55d9eafe24b073c66dcf98fd84e0a1e945fb9d`](https://sepolia.basescan.org/address/0xae55d9eafe24b073c66dcf98fd84e0a1e945fb9d) |
+| Exchange | [`0xb4bc699e2d26dd586ed7ec15abaaaed9a883bbbe`](https://sepolia.basescan.org/address/0xb4bc699e2d26dd586ed7ec15abaaaed9a883bbbe) |
+
+Mercado demo activo: `usd-dop-64-diciembre-2026`
+(`0xe78ba17c3b29e1e167eb5188552fb72f7989457f34775bda655f51c2cdad3449`).
+Detalles completos en [`deployments/base-sepolia.json`](./deployments/base-sepolia.json).
+El tUSDC tiene faucet abierto: `faucet(address, amount)` hasta 10,000 tUSDC por llamada.
+
 ## Desplegar en Base Sepolia
 
 ```bash
