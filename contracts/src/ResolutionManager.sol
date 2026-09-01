@@ -55,6 +55,7 @@ contract ResolutionManager is AccessControl, ReentrancyGuard {
         uint256 disputeBond_,
         address treasury_
     ) {
+        require(treasury_ != address(0), "treasury zero");
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         registry = registry_;
         bondToken = bondToken_;

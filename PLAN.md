@@ -97,9 +97,17 @@ funciones puras sin dependencia del framework precisamente para que ese port sea
   (`script/Drills.s.sol`): trades MINT reales con firmas EIP-712, resolución
   disputada con bond devuelto, finalización permissionless tras la ventana,
   VOID con reembolso 50/50 y pausa de emergencia.
-- Lectura on-chain en la web (`/testnet` vía viem) ✅; el trading con wallet
-  del usuario (WalletConnect + firma EIP-712 en el cliente) sigue pendiente.
-- Invariant tests ampliados, Slither, Echidna (§28); multisig + timelock (§41).
+- Lectura on-chain en la web (`/testnet` vía viem) ✅.
+- ~~Trading con wallet del usuario~~ ✅ pipeline completo implementado y
+  probado end-to-end contra Base Sepolia: la wallet firma la orden EIP-712 en
+  el navegador (`components/OnchainTrade.tsx`), el backend verifica la firma
+  y la casa (`lib/onchain.ts` + `/api/onchain/orders`), y el relayer OPERATOR
+  liquida en el Exchange real (settlement verificado on-chain: 5 shares YES +
+  5 tUSDC bloqueados en el mercado demo).
+- ~~Invariant tests~~ ✅ 3 invariantes × 128,000 llamadas (vault solvente,
+  colateral == claims pendientes, sin shares sin colateral).
+- ~~Slither~~ ✅ ejecutado y triado (`contracts/SECURITY.md`); sin hallazgos
+  explotables abiertos. Echidna y multisig + timelock (§41) pendientes.
 - Chain Selection Engine con scoring formal (§4) — candidato inicial **Base**,
   alternativas Arbitrum One / Optimism.
 - Backend .NET 10 monolito modular (§23), PostgreSQL + Redis, event bus, Blockchain

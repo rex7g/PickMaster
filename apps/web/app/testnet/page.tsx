@@ -8,6 +8,7 @@ import {
   registryAbi,
   vaultAbi,
 } from "@/lib/chain";
+import { OnchainTrade } from "@/components/OnchainTrade";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -127,6 +128,10 @@ export default async function TestnetPage() {
           </section>
         </>
       )}
+
+      <div className="mb-8 max-w-xl">
+        <OnchainTrade />
+      </div>
 
       <h2 className="font-semibold text-white mb-3">Contratos del protocolo</h2>
       <div className="rounded-xl border border-slate-800 overflow-hidden text-sm mb-8">

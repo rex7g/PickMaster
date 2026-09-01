@@ -90,6 +90,7 @@ contract Exchange is AccessControl, ReentrancyGuard, EIP712 {
         uint16 feeBps_
     ) EIP712("PickMaster Exchange", "1") {
         require(feeBps_ <= MAX_FEE_BPS, "fee too high");
+        require(treasury_ != address(0), "treasury zero");
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         collateral = collateral_;
         registry = registry_;
