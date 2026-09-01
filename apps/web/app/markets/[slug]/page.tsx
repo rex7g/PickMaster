@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getExchange, formatCents, formatPct, formatUsd } from "@/lib/store";
 import { TradeForm } from "@/components/TradeForm";
+import { PriceChart } from "@/components/PriceChart";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,9 @@ export default async function MarketPage({
   const trades = exchange.marketTrades(market.id).slice(-12).reverse();
   const arbitrage = exchange.detectArbitrage(market.id);
   const resolution = exchange.resolutionState(market.id);
-  const demoBalance = exchange.users.get("user_demo")?.balanceCents ?? 0;
+  const { getSessionUserId } = await import("@/lib/auth");
+  const sessionId = await getSessionUserId();
+  const demoBalance = exchange.users.get(sessionId ?? "user_demo")?.balanceCents ?? 0;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
@@ -72,6 +75,10 @@ export default async function MarketPage({
             </div>
           ))}
         </div>
+
+        <section className="mt-8 rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+          <PriceChart marketId={market.id} />
+        </section>
 
         <section className="mt-8">
           <h2 className="font-semibold text-white mb-2">Order book (SÍ)</h2>

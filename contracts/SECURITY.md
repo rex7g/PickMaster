@@ -7,6 +7,7 @@
 | Unit/integration tests | ✅ 14 tests (`test/Protocol.t.sol`) |
 | Fuzz | ✅ conservación de colateral, 256 runs |
 | Invariant tests | ✅ 3 invariantes × 128,000 llamadas aleatorias (`test/Invariants.t.sol`): vault solvente, locked == claims pendientes exactos, sin shares sin colateral |
+| Gobernanza (multisig + timelock, §41) | ✅ `TimelockController` de 48 h desplegado y administrando los 5 contratos (`test/Governance.t.sol`, 5 tests); el deployer renunció a `DEFAULT_ADMIN_ROLE` |
 | Análisis estático (Slither) | ✅ ejecutado; triaje abajo — sin hallazgos explotables abiertos |
 | Echidna | ⬜ pendiente |
 | Verificación formal | ⬜ pendiente (candidatos: CollateralVault, settleMint) |

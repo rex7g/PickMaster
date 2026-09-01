@@ -11,10 +11,18 @@
     "PositionToken": "0xb70655a2c6b1d31564a035b616238ef4c6396a94",
     "CollateralVault": "0x568792c87b6c95c4cd75de4ea058c0f5cc6f904e",
     "ResolutionManager": "0xae55d9eafe24b073c66dcf98fd84e0a1e945fb9d",
-    "Exchange": "0xb4bc699e2d26dd586ed7ec15abaaaed9a883bbbe"
+    "Exchange": "0xb4bc699e2d26dd586ed7ec15abaaaed9a883bbbe",
+    "TimelockController": "0xA56f15ec759ad1E7Ef13B907373279aA0436400E"
   },
   "markets": {
     "usd-dop-64-diciembre-2026": "0xe78ba17c3b29e1e167eb5188552fb72f7989457f34775bda655f51c2cdad3449"
   },
-  "notes": "Despliegue de testnet (§52). Todos los roles operativos los tiene el deployer para simulacros; NO replicar en producción. tUSDC tiene faucet abierto: faucet(address,uint256) hasta 10,000e6 por llamada."
+  "notes": "Despliegue de testnet (§52). Todos los roles operativos los tiene el deployer para simulacros; NO replicar en producción. tUSDC tiene faucet abierto: faucet(address,uint256) hasta 10,000e6 por llamada. Gobernanza: ningun cambio de roles o fees es posible sin pasar por el timelock de 48h.",
+  "governance": {
+    "timelock": "0xA56f15ec759ad1E7Ef13B907373279aA0436400E",
+    "minDelaySeconds": 172800,
+    "proposer": "0x389d3beFd283e1c6acbE8FbC81E33fD279FB3c2f",
+    "executors": "open (address(0) tras el delay)",
+    "note": "DEFAULT_ADMIN_ROLE de Registry/Exchange/Resolution/Vault/Positions traspasado al timelock; el deployer renuncio. En testnet el proposer/guardian es una EOA; en produccion es un multisig (§41)."
+  }
 }

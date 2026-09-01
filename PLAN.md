@@ -17,7 +17,7 @@ implementada en este repositorio.
 |------|--------|-------------------|-----------------|-------------|--------|
 | 0 | Legal & Research | 6–10 semanas (en paralelo con Fase 1) | 1 PM + asesoría legal RD/crypto + 1 compliance officer | No | Pendiente (checklist abajo) |
 | 1 | Prototype | 6–8 semanas | 2–3 full-stack + 1 diseñador | No (todo simulado) | ✅ **Implementada en este repo** |
-| 2 | Testnet | 10–14 semanas | +2 ingenieros Solidity, +1 backend, +1 QA | No (Base Sepolia + test USDC) | 🔨 **En curso: contratos implementados y testeados** (ver abajo) |
+| 2 | Testnet | 10–14 semanas | +2 ingenieros Solidity, +1 backend, +1 QA | No (Base Sepolia + test USDC) | ✅ **Desplegada y operativa en Base Sepolia** (ver abajo) |
 | 3 | Closed Beta | 8–12 semanas | Equipo Fase 2 + soporte + ops | Limitado, usuarios invitados | Pendiente |
 | 4 | Production | 6–8 semanas de hardening + gate de auditoría | Equipo completo + auditoría externa | Sí, tras aprobación legal/auditoría | Pendiente |
 
@@ -73,7 +73,7 @@ API routes de Next.js) para iterar rápido sin dinero real. El port a .NET 10/AS
 Core como monolito modular está planificado para Fase 2; el dominio está escrito como
 funciones puras sin dependencia del framework precisamente para que ese port sea directo.
 
-## Fase 2 — Testnet (10–14 semanas) — 🔨 en curso
+## Fase 2 — Testnet (10–14 semanas) — ✅ desplegada en Base Sepolia
 
 **Completado en este repo** (`contracts/`, proyecto Foundry):
 - Contratos reales con OpenZeppelin v5: `MarketRegistry` (máquina de estados +
@@ -107,14 +107,28 @@ funciones puras sin dependencia del framework precisamente para que ese port sea
 - ~~Invariant tests~~ ✅ 3 invariantes × 128,000 llamadas (vault solvente,
   colateral == claims pendientes, sin shares sin colateral).
 - ~~Slither~~ ✅ ejecutado y triado (`contracts/SECURITY.md`); sin hallazgos
-  explotables abiertos. Echidna y multisig + timelock (§41) pendientes.
-- Chain Selection Engine con scoring formal (§4) — candidato inicial **Base**,
-  alternativas Arbitrum One / Optimism.
-- Backend .NET 10 monolito modular (§23), PostgreSQL + Redis, event bus, Blockchain
-  Indexer con reorg detection y RPC failover (§26).
-- Wallets: WalletConnect/MetaMask/Coinbase + embedded smart accounts, ERC-4337 y
-  paymasters para UX gasless (§19–20).
-- Simulacros: resolución automática, disputada, cancelación (VOID), caída de chain (§52).
+  explotables abiertos.
+- ~~Multisig + timelock (§41)~~ ✅ `TimelockController` de 48 h desplegado en
+  Base Sepolia y administrando los 5 contratos; el deployer renunció a
+  `DEFAULT_ADMIN_ROLE` (verificado on-chain). 5 tests de gobernanza.
+- ~~Chain Selection Engine (§4)~~ ✅ scoring formal en
+  `packages/core/src/chainSelection.ts` con los pesos del Master Prompt y las
+  tres candidatas evaluadas → **Base** seleccionada (3 tests).
+- ~~Blockchain Indexer (§26)~~ ✅ versión Fase 2: escaneo por tramos de los
+  eventos `MintSettled` y `MarketStateChanged` con cursor y caché, mostrado en
+  `/testnet` con enlaces al explorador.
+- ~~Wallets~~ ✅ MetaMask/Coinbase/inyectadas para login y para firmar órdenes;
+  smart accounts ERC-4337 + paymasters (UX gasless, §19) siguen pendientes.
+- Frontend de producto: ✅ login modal (Google/email/wallet), perfil completo
+  (7 secciones, referral, sociales, API keys), menú de usuario con
+  Portfolio/Cash/Depositar, leaderboard, y **gráfico de probabilidad por
+  mercado** con rangos 1H–ALL, crosshair y etiquetas directas.
+
+**Pendiente para cerrar Fase 2 → Fase 3:**
+- Echidna (fuzzing de propiedades) y verificación formal de `CollateralVault`.
+- Backend .NET 10 monolito modular (§23), PostgreSQL + Redis, event bus, indexer
+  como servicio con reorg detection y RPC failover.
+- Simulacro de caída de chain/sequencer (§52) y smart accounts gasless (§19–20).
 
 ## Fase 3 — Closed Beta (8–12 semanas)
 

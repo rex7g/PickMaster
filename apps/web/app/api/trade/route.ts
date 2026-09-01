@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { DEMO_USER_ID, signOrder } from "@pickmaster/core";
+import { signOrder } from "@pickmaster/core";
 import { getExchange } from "@/lib/store";
+import { recordPrice } from "@/lib/history";
+import { getSessionUserId } from "@/lib/auth";
 
 /**
  * Simulated trading endpoint for the demo user. In Phase 2 the client's
@@ -10,6 +12,9 @@ import { getExchange } from "@/lib/store";
 export async function POST(request: Request) {
   const exchange = getExchange();
   try {
+    // Con sesión activa opera la cuenta del usuario; sin sesión, la demo.
+    const sessionUser = await getSessionUserId();
+    const userId = sessionUser ?? "user_demo";
     const body = await request.json();
     const { marketId, outcomeId, side, priceCents, quantity } = body ?? {};
     if (
@@ -21,9 +26,9 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json({ error: "Payload inválido." }, { status: 400 });
     }
-    const signature = signOrder(DEMO_USER_ID, marketId, outcomeId, side, priceCents, quantity);
+    const signature = signOrder(userId, marketId, outcomeId, side, priceCents, quantity);
     const { order, trades } = exchange.placeOrder({
-      userId: DEMO_USER_ID,
+      userId,
       marketId,
       outcomeId,
       side,
@@ -31,6 +36,7 @@ export async function POST(request: Request) {
       quantity,
       signature,
     });
+    if (trades.length > 0) recordPrice(exchange, marketId);
     return NextResponse.json({
       orderId: order.id,
       status: order.status,

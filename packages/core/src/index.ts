@@ -13,3 +13,4 @@ export * from "./audit";
 export * from "./portfolio";
 export * from "./exchange";
 export * from "./seed";
+export * from "./chainSelection";

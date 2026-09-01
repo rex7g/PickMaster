@@ -1,13 +1,17 @@
 import { getExchange, formatUsd } from "@/lib/store";
 import { DEMO_USER_ID } from "@pickmaster/core";
+import { getSessionUserId, getProfile } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
   const exchange = getExchange();
-  const view = exchange.portfolio(DEMO_USER_ID);
+  const sessionId = await getSessionUserId();
+  const userId = sessionId ?? DEMO_USER_ID;
+  const username = sessionId ? getProfile(sessionId)?.username : null;
+  const view = exchange.portfolio(userId);
   const positions = exchange
-    .userPositions(DEMO_USER_ID)
+    .userPositions(userId)
     .filter((p) => p.quantity > 0 || p.settled);
 
   const pnlColor = (v: number) =>
@@ -26,7 +30,9 @@ export default function PortfolioPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-6">Portfolio (usuario demo)</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">
+        Portfolio {username ? `de ${username}` : "(usuario demo)"}
+      </h1>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         {stats.map(([label, value, color]) => (
           <div key={label} className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">

@@ -9,6 +9,7 @@ import {
   vaultAbi,
 } from "@/lib/chain";
 import { OnchainTrade } from "@/components/OnchainTrade";
+import { indexProtocolEvents } from "@/lib/indexer";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -53,10 +54,17 @@ async function readChain() {
 export default async function TestnetPage() {
   let data: Awaited<ReturnType<typeof readChain>> | null = null;
   let error: string | null = null;
+  let indexed: Awaited<ReturnType<typeof indexProtocolEvents>> | null = null;
   try {
     data = await readChain();
   } catch (e) {
     error = e instanceof Error ? e.message : "Error leyendo la cadena.";
+  }
+  // El indexer escanea por tramos: un fallo suyo no debe tumbar la página.
+  try {
+    indexed = await indexProtocolEvents();
+  } catch {
+    indexed = null;
   }
 
   return (
@@ -132,6 +140,55 @@ export default async function TestnetPage() {
       <div className="mb-8 max-w-xl">
         <OnchainTrade />
       </div>
+
+      {indexed && (
+        <section className="mb-8">
+          <h2 className="font-semibold text-white mb-1">Indexer on-chain</h2>
+          <p className="text-xs text-slate-500 mb-3">
+            Eventos del protocolo leídos directamente de la cadena (§26):{" "}
+            {indexed.mints.length} settlements MINT y {indexed.stateChanges.length} cambios de estado.
+            {!indexed.synced && (
+              <span className="text-amber-400">
+                {" "}
+                Sincronizando… bloque {String(indexed.cursor)} de {String(indexed.head)}; recarga para continuar.
+              </span>
+            )}
+          </p>
+          <div className="rounded-xl border border-slate-800 overflow-hidden text-xs">
+            {indexed.mints.slice(-8).reverse().map((m) => (
+              <div key={m.txHash + m.quantity} className="flex flex-wrap justify-between gap-2 px-4 py-1.5 border-t border-slate-800/60 first:border-t-0">
+                <span className="text-slate-300">
+                  MINT {m.quantity} shares @ {m.yesPriceCents}¢ · bloque {m.blockNumber}
+                </span>
+                <a
+                  href={`https://sepolia.basescan.org/tx/${m.txHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-mono text-emerald-400 hover:underline"
+                >
+                  {m.txHash.slice(0, 14)}…
+                </a>
+              </div>
+            ))}
+            {indexed.stateChanges.slice(-6).reverse().map((s) => (
+              <div key={s.txHash + String(s.state)} className="flex flex-wrap justify-between gap-2 px-4 py-1.5 border-t border-slate-800/60 bg-slate-900/40">
+                <span className="text-slate-400">
+                  Estado → {MARKET_STATES[s.state] ?? s.state}
+                  {s.state === 4 ? ` (gana ${s.winningOutcome === 0 ? "SÍ" : "NO"})` : ""} · bloque {s.blockNumber}
+                </span>
+                <a
+                  href={`https://sepolia.basescan.org/tx/${s.txHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-mono text-slate-500 hover:underline"
+                >
+                  {s.txHash.slice(0, 14)}…
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <h2 className="font-semibold text-white mb-3">Contratos del protocolo</h2>
       <div className="rounded-xl border border-slate-800 overflow-hidden text-sm mb-8">

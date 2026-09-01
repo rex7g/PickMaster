@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { UserMenu } from "@/components/UserMenu";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/portfolio" className="hover:text-white">Portfolio</Link>
               <Link href="/admin" className="hover:text-white">Admin</Link>
               <Link href="/testnet" className="hover:text-white text-emerald-400/80">Testnet ⛓</Link>
-              <Link href="/api/markets" className="hover:text-white">API</Link>
+            </div>
+            <div className="ml-auto flex items-center gap-2">
+              <UserMenu />
             </div>
           </nav>
         </header>

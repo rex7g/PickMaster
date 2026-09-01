@@ -17,6 +17,13 @@
 | CollateralVault | [`0x568792c87b6c95c4cd75de4ea058c0f5cc6f904e`](https://sepolia.basescan.org/address/0x568792c87b6c95c4cd75de4ea058c0f5cc6f904e) |
 | ResolutionManager | [`0xae55d9eafe24b073c66dcf98fd84e0a1e945fb9d`](https://sepolia.basescan.org/address/0xae55d9eafe24b073c66dcf98fd84e0a1e945fb9d) |
 | Exchange | [`0xb4bc699e2d26dd586ed7ec15abaaaed9a883bbbe`](https://sepolia.basescan.org/address/0xb4bc699e2d26dd586ed7ec15abaaaed9a883bbbe) |
+| TimelockController (§41) | [`0xA56f15ec759ad1E7Ef13B907373279aA0436400E`](https://sepolia.basescan.org/address/0xA56f15ec759ad1E7Ef13B907373279aA0436400E) |
+
+**Gobernanza activa**: el `DEFAULT_ADMIN_ROLE` de los cinco contratos del protocolo
+pertenece al timelock (delay de 48 h) y el deployer renunció al suyo — verificado
+on-chain. Ningún cambio de roles o de fees es posible sin encolar la operación y
+esperar el delay; la pausa de emergencia sigue siendo instantánea para el guardián.
+En producción el proposer/guardián es un multisig, no una EOA.
 
 Mercado demo activo: `usd-dop-64-diciembre-2026`
 (`0xe78ba17c3b29e1e167eb5188552fb72f7989457f34775bda655f51c2cdad3449`).
